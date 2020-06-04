@@ -8,37 +8,41 @@ import numpy as np
 from multiprocessing import Manager, Process
 from EnriquezMancheno_Alejandro_ExamenMultiprocessingMetodos import Metodo1
 import random
+import time
 
 num_procesos = 5
 datosCant = 4000000
 datos = [random.randrange(1,30) for i in range(datosCant)]
-result = []
-resultado = []
 squared_sum = 0
 
 inicio = 0
 fin = 0
 
-with Manager() as manager:
-    lista1 = manager.list()
-    lista2 = manager.list()
-    procesos = []
-    pro = datosCant//num_procesos
-    residuo = datosCant % num_procesos
-    
-    for i in range(num_procesos-1):
-        extra = pro+1 if i <= residuo else pro
-        p = Process(target=Metodo1, args=(datos[inicio:inicio+extra]), lista1)
-        p.start()
-        procesos.append(p)
-        inicio = inicio + extra
-    
-    for o in procesos:
-        p.join()
-        p.terminate()
+
+if __name__ == '__main__':
+    with Manager() as manager:
+        lista1 = manager.list()
+        procesos = []
+        pro = datosCant//num_procesos-1
+        residuo = datosCant % num_procesos-1
+        print(residuo)
+        ti = time.time()
+        for i in range(num_procesos):
+            extra = pro+1 if i <= residuo else pro
+            p = Process(target=Metodo1, args=(datos[inicio:inicio+extra], lista1))
+            p.start()
+            procesos.append(p)
+            inicio = inicio + extra
         
-        
-        
-        
+        for p in procesos:
+            p.join()
+            p.terminate()
+            
+        tf = time.time()
+        tt = (tf-ti)*1000
+        print("Tiempo de procesamiento: ", tt)
+            
+            
+            
         
         
