@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     # Prepare data
 
-    ar_count = 40
+    ar_count = 4000000
 
     #Generate ar_count random numbers between 1 and 30
 
